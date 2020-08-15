@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { MongoClient } = require("mongodb");
 const uri =
   "mongodb+srv://djtimmy679:Timmy11721@cluster0.iyoxa.mongodb.net/test";
-const client = new MongoClient(uri, { useUnifiedTopology: true });
+const client = new MongoClient(uri);
 var userId = null;
 async function createUser(client, newUser) {
   const result = await client
