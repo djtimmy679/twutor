@@ -26,8 +26,8 @@
         <div class="inner">
           <h3 class="masthead-brand">Twutor</h3>
           <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link active" href="#">Home</a>
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="/userPortal">Home</a>
+            <a class="nav-link active" href="/profile">About Me</a>
             <a class="nav-link" href="/logout">Logout</a>
           </nav>
         </div>
@@ -35,18 +35,30 @@
 
     <form action="/update-user" method="POST">
 		<h1>Edit Profile</h1>
-		<p class="hint-text">Enter information to help you connect with others!</p>
+		<p class="hint-text">Enter or update information to help you connect with others!</p>
         <div class="form-group">
-            <h4>{{user.first_name}} {{user.last_name}}</h4>  
-            <h5>{{user.email}}</h5>	
+            <h5>{{user.first_name}} {{user.last_name}} ({{user.role}})</h4>  
+            <h5>{{user.email}} | {{user.phone}}</h5>		
+            <h5>{{user.subjects}}</h5>	
         </div>
-		<div class="form-group">
+        <div class="form-group">
+            <input type="text" class="form-control" name="first_name" placeholder="First Name">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="last_name" placeholder="Last Name">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="email" placeholder="Email Address">
+        </div>
+		    <div class="form-group">
             <input type="tel" class="form-control" name="phone" placeholder="Phone number">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="subjects" placeholder="Subjects" required="required">
-        </div>     
-        <p class="hint-text">Separate subjects by space (ex: "algebra1 physics english11 apush")</p>     
+            <input type="tel" class="form-control" name="role" placeholder="Role (Tutor or student)">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="subjects" placeholder="Enter subjects by space (ex: 'algebra1 physics english11 apush')">
+        </div>      
 		<div class="form-group">
             <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
         </div>

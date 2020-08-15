@@ -42,6 +42,21 @@ async function updateUser(client, user) {
   console.log(`${result.matchedCount} document(s) matched the query criteria.`);
   console.log(`${result.modifiedCount} document(s) was/were updated.`);
 }
+async function findUsers(client, user) {
+  result = await client.db("UserDB").collection("users").find({
+    subjects: {$in: user.subjects}
+  })
+  let matches = await result.toArray()
+  let newMatches = []
+  matches.forEach(match => {
+    if(match.email !== user.email) {
+      newMatches.push(match)
+    }
+  })
+  matches = newMatches
+  console.log(matches)
+  return matches
+}
 const connectFunc = async () => {
   try {
     // Connect to the MongoDB cluster
@@ -87,6 +102,13 @@ app.get("/profile", (req, res) => {
     res.redirect("/login");
   }
 });
+app.get("/connect", async (req, res) => {
+  const matches = await findUsers(client, userId)
+  res.render("connect", { matches: matches})
+})
+app.get("/about", (req, res) => {
+  res.render("about")
+})
 app.engine(
   "hbs",
   hbs({
@@ -121,8 +143,17 @@ app.post("/login-worker", async (req, res) => {
 });
 app.post("/update-user", async (req, res) => {
   console.log(req.body);
+  if(req.body.first_name !=="") {
+    userId.first_name = req.body.first_name
+  }
+  if(req.body.last_name !=="") {
+    userId.last_name = req.body.last_name
+  }
   if (req.body.phone !== "") {
     userId.phone = req.body.phone;
+  }
+  if (req.body.role !== "") {
+    userId.role = req.body.role;
   }
   if (req.body.subjects !== "") {
     const subjects = req.body.subjects.split(" ");
