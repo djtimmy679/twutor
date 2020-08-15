@@ -12,6 +12,20 @@ async function createListing(client, newListing){
   console.log(`New user created with the following id: ${result.insertedId}`);
   return result.insertedId;
 }
+async function validateLogin(client, user) {
+  result = await client.db("UserDB").collection("users")
+                      .findOne({ email: user.email, password: user.password });
+
+  if (result) {
+      console.log(`Found a listing in the collection with the name '${user.email}':`);
+      console.log(result._id);
+      return result._id;
+  } else {
+      console.log(`No listings found with the name '${user.email}'`);
+      return null;
+  }
+  
+}
 const connectFunc = async () => {
   try {
     // Connect to the MongoDB cluster
@@ -36,6 +50,9 @@ app.get('/', (req, res) => {
 app.get('/signup', (req, res) => {
   res.render('signup')
 })
+app.get('/login', (req, res) => {
+  res.render('login')
+})
 app.engine('hbs', hbs({
   defaultLayout: 'main',
   extname: '.hbs'
@@ -51,7 +68,25 @@ app.post('/create-user', async (req, res) => {
   // doesn't work
   userId = await createListing(client, user);
   console.log(userId)
-  res.redirect('/')
+  res.redirect('/login')
+})
+app.post('/login-worker', async (req, res) => {
+  console.log(req.body)
+  var user = {
+    email: req.body.email,
+    password: req.body.password,
+  }
+  userId = await validateLogin(client, user)
+  if(userId) {
+    res.redirect('/userPortal')
+  } else {
+    res.redirect('/')
+  }
+
+  // doesn't work
+  // userId = await createListing(client, user);
+  // console.log(userId)
+  // res.redirect('/portal')
 })
 app.set('view engine', 'hbs');
 
