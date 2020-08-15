@@ -123,7 +123,14 @@ app.post("/create-user", async (req, res) => {
     last_name: req.body.last_name,
     email: req.body.email,
     password: req.body.password,
+    role: req.body.role,
+    subjects: req.body.subjects
   };
+  if (req.body.subjects !== "") {
+    const subjects = req.body.subjects.split(" ");
+    console.log(subjects);
+    user.subjects = subjects;
+  }
   // doesn't work
   userId = await createUser(client, user);
   res.redirect("/login");
