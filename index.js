@@ -2,11 +2,27 @@ const express = require('express')
 const hbs = require('express-handlebars');
 const app = express()
 const port = 3000
-const mongo = require('mongo')
-const assert = require('assert')
 const bodyParser = require('body-parser');
-
-const url = 'mongodb://localhost:27017/test'
+const {MongoClient} = require('mongodb');
+const uri = "mongodb+srv://djtimmy679:Timmy11721@cluster0.iyoxa.mongodb.net/test"
+const client = new MongoClient(uri);
+var userId = {}
+async function createListing(client, newListing){
+  const result = await client.db("UserDB").collection("users").insertOne(newListing);
+  console.log(`New user created with the following id: ${result.insertedId}`);
+  return result.insertedId;
+}
+const connectFunc = async () => {
+  try {
+    // Connect to the MongoDB cluster
+    await client.connect();
+    console.log('connected')
+    // Make the appropriate DB calls
+  } catch (e) {
+      console.error(e);
+  }
+}
+connectFunc()
 // for parsing application/json
 app.use(bodyParser.json()); 
 
@@ -24,7 +40,7 @@ app.engine('hbs', hbs({
   defaultLayout: 'main',
   extname: '.hbs'
 }));
-app.post('/create-user',(req, res) => {
+app.post('/create-user', async (req, res) => {
   console.log(req.body)
   var user = {
     first_name: req.body.first_name,
@@ -33,15 +49,8 @@ app.post('/create-user',(req, res) => {
     password: req.body.password,
   }
   // doesn't work
-  mongo.connect(url, (err, db) => {
-    console.log('here')
-    assert.equal(null, err);
-    db.collection('user-data').insertOne(user, (err, result) => {
-      assert.equal(null, err);
-      console.log('Item inserted')
-      db.close()
-    })
-  })
+  userId = await createListing(client, user);
+  console.log(userId)
   res.redirect('/')
 })
 app.set('view engine', 'hbs');
