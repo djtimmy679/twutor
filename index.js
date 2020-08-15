@@ -7,7 +7,7 @@ const { MongoClient } = require("mongodb");
 const uri =
   "mongodb+srv://djtimmy679:Timmy11721@cluster0.iyoxa.mongodb.net/test";
 const client = new MongoClient(uri, { useUnifiedTopology: true });
-var userId = {};
+var userId = null;
 async function createUser(client, newUser) {
   const result = await client
     .db("UserDB")
@@ -27,11 +27,20 @@ async function validateLogin(client, user) {
       `Found a listing in the collection with the name '${user.email}':`
     );
     console.log(result._id);
-    return result._id;
+    return result;
   } else {
     console.log(`No listings found with the name '${user.email}'`);
     return null;
   }
+}
+async function updateUser(client, user) {
+  result = await client
+    .db("UserDB")
+    .collection("users")
+    .updateOne({ email: user.email }, { $set: user });
+
+  console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+  console.log(`${result.modifiedCount} document(s) was/were updated.`);
 }
 const connectFunc = async () => {
   try {
@@ -60,6 +69,24 @@ app.get("/signup", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
+app.get("/logout", (req, res) => {
+  userId = null;
+  res.redirect("/");
+});
+app.get("/userPortal", (req, res) => {
+  if (userId) {
+    res.render("userPortal", { user: userId });
+  } else {
+    res.redirect("/login");
+  }
+});
+app.get("/profile", (req, res) => {
+  if (userId) {
+    res.render("profile", { user: userId });
+  } else {
+    res.redirect("/login");
+  }
+});
 app.engine(
   "hbs",
   hbs({
@@ -77,7 +104,6 @@ app.post("/create-user", async (req, res) => {
   };
   // doesn't work
   userId = await createUser(client, user);
-  console.log(userId);
   res.redirect("/login");
 });
 app.post("/login-worker", async (req, res) => {
@@ -90,8 +116,21 @@ app.post("/login-worker", async (req, res) => {
   if (userId) {
     res.redirect("/userPortal");
   } else {
-    res.redirect("/");
+    res.redirect("/login");
   }
+});
+app.post("/update-user", async (req, res) => {
+  console.log(req.body);
+  if (req.body.phone !== "") {
+    userId.phone = req.body.phone;
+  }
+  if (req.body.subjects !== "") {
+    const subjects = req.body.subjects.split(" ");
+    console.log(subjects);
+    userId.subjects = subjects;
+  }
+  updateUser(client, userId);
+  res.redirect("/userPortal");
 });
 app.set("view engine", "hbs");
 
