@@ -14,20 +14,20 @@ Twutor is a student networking app designed to connect struggling students with 
 <img src="/images/Home.PNG" width="500">
 <img src="/images/userPortal.PNG" width="500">
 <img src="/images/Matches.PNG" width="500">
-## Getting Started
-Get started running a development environment by running the following commands.
-`git clone https://github.com/djtimmy679/twutor`
-`cd twutor`
-`npm install`
-`npm run test`
-Pull requests for improvements to this site are certainly welcome and appreciated!
+
 ### Prerequisites
 
 What things you need to install the software and how to install them
 
 * [Node Package Manager (npm)](npmjs.com) 
 
- 
+### Getting Started
+Get started running a development environment by running the following commands. <br/>
+`git clone https://github.com/djtimmy679/twutor` <br/>
+`cd twutor` <br/>
+`npm install` <br/>
+`npm run test` <br/>
+Pull requests for improvements to this site are certainly welcome and appreciated!
 ## Deployment
 
 Deployed on heroku at twutor.herokuapp.com
