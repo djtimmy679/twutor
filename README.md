@@ -11,9 +11,9 @@ Twutor is a student networking app designed to connect struggling students with 
 * [Bootstrap](https://getbootstrap.com/) - Bootstrap styling
 
 ## Demo
-<img src="/images/Home.PNG" width="400">
-<img src="/images/Matches.PNG" width="400">
-<img src="/images/userPortal.PNG" width="400">
+<img src="/images/Home.PNG" width="500">
+<img src="/images/userPortal.PNG" width="500">
+<img src="/images/Matches.PNG" width="500">
 ## Getting Started
 Get started running a development environment by running the following commands.
 `git clone https://github.com/djtimmy679/twutor`
