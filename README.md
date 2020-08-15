@@ -2,6 +2,13 @@
 
 Twutor is a student networking app designed to connect struggling students with study groups and qualified peer tutors. Through the app, users are able to create a profile, securely sign in, and match with other students/tutors with similar profiles. After matching, users can securely reach out via email or phone to other. 
 
+## Built With
+
+* [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Cloud client for MongoDB
+* [Express JS](https://expressjs.com) - Express server
+* [Node.js](https://nodejs.org) - NodeJS
+* [Handlebars](https://handlebarsjs.com/) - Handlebars templating engine
+* [Bootstrap](https://getbootstrap.com/) - Bootstrap styling
 ## Getting Started
 Get started running a development environment by running the following commands.
 `git clone https://github.com/djtimmy679/twutor`
@@ -19,14 +26,6 @@ What things you need to install the software and how to install them
 ## Deployment
 
 Deployed on heroku at twutor.herokuapp.com
-
-## Built With
-
-* [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Cloud client for MongoDB
-* [Express JS](https://expressjs.com) - Express server
-* [Node.js](https://nodejs.org) - NodeJS
-* [Handlebars](https://handlebarsjs.com/) - Handlebars templating engine
-* [Bootstrap](https://getbootstrap.com/) - Bootstrap styling
 
 ## Authors
 
