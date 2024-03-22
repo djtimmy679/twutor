@@ -1,10 +1,11 @@
 const express = require("express");
 const hbs = require("express-handlebars");
+require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 const bodyParser = require("body-parser");
 const { MongoClient } = require("mongodb");
-const uri = "mongodb+srv://djtimmy679:Timmy11721@twutor.anctggi.mongodb.net/?retryWrites=true&w=majority&appName=twutor";  "mongodb+srv://djtimmy679:Timmy11721@cluster0.iyoxa.mongodb.net/test";
+const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 var userId = null;
 async function createUser(client, newUser) {
