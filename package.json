@@ -1,7 +1,7 @@
 {
   "name": "twutor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Twutor is a student networking app designed to connect struggling students with study groups and qualified peer tutors. Through the app, users are able to create a profile, securely sign in, and match with other students/tutors with similar profiles. After matching, users can securely reach out via email or phone to other.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "dotenv": "^16.4.5",
     "express": "^4.17.1",
     "express-handlebars": "^5.0.0",
     "lodash": "^4.17.20",
