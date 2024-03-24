@@ -36,9 +36,11 @@
     {{#each matches}}
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{first_name}} {{last_name}}</h5>
+                <h5 class="card-title">{{firstName}} {{lastName}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ role }}</h6>
-                <p class="card-text">Their subjects are: {{#each subjects}} {{this}} {{/each}}</p>   
+                <p class="card-text">Their subjects are {{#each subjects}}
+                  {{this}}{{#unless @last}}, {{/unless}}
+                {{/each}}  </p>  
                 <a href="tel:{{phone}}" class="card-link">Phone</a>
                 <a href="mailto:{{email}}" class="card-link">Email</a>
             </div>

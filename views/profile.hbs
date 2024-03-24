@@ -14,13 +14,13 @@
 
     <!-- Bootstrap core CSS -->
     <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
   </head>
 
   <body class="text-center">
-
+  
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <header class="masthead mb-auto">
         <div class="inner">
@@ -35,30 +35,55 @@
 
     <form action="/update-user" method="POST">
 		<h1>Edit Profile</h1>
-		<p class="hint-text">Enter or update information to help you connect with others!</p>
+    		<p class="hint-text">Enter or update information to help you connect with others!</p>
+
         <div class="form-group">
-            <h5>{{user.first_name}} {{user.last_name}} ({{user.role}})</h4>  
-            <h5>{{user.email}} | {{user.phone}}</h5>		
-            <h5>{{user.subjects}}</h5>	
+            <input type="text" class="form-control" name="firstName" value="{{user.firstName}}">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="first_name" placeholder="First Name">
+            <input type="text" class="form-control" name="lastName" value="{{user.lastName}}">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="last_name" placeholder="Last Name">
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="email" placeholder="Email Address">
+            <input type="text" class="form-control" name="email" value="{{user.email}}">
         </div>
 		    <div class="form-group">
-            <input type="tel" class="form-control" name="phone" placeholder="Phone number">
+            <input type="tel" class="form-control" name="phone" value="{{user.phone}}">
         </div>
-        <div class="form-group">
-            <input type="tel" class="form-control" name="role" placeholder="Role (Tutor or student)">
+            <!-- Styled Radio Buttons as Toggle Buttons -->
+        <div class="btn-group" role="group" aria-label="Role Selection">
+            <input type="hidden" name="role" id="roleInput" value="{{user.role}}">
+            <button type="button" class="btn btn-outline-light role-btn" data-role="Student">Student</button>
+            <button type="button" class="btn btn-outline-light role-btn" data-role="Tutor">Tutor</button>
         </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="subjects" placeholder="Enter subjects by space (ex: 'algebra1 physics english11 apush')">
-        </div>      
+    <div class="form-group">
+        <label for="subjects">Subjects:</label>
+        <select multiple class="form-control" name="subjects[]" id="subjects">
+            <option value="Algebra 1">Algebra 1</option>
+            <option value="Geometry">Geometry</option>
+            <option value="Algebra 2">Algebra 2</option>
+            <option value="Pre-Calculus">Pre-Calculus</option>
+            <option value="AP Calculus AB">AP Calculus AB</option>
+            <option value="AP Calculus BC">AP Calculus BC</option>
+            <option value="AP Biology">AP Biology</option>
+            <option value="AP Chemistry">AP Chemistry</option>
+            <option value="AP Physics 1">AP Physics 1</option>
+            <option value="AP Physics 2">AP Physics 2</option>
+            <option value="AP Physics C">AP Physics C</option>
+            <option value="Chemistry">Calculus</option>
+            <option value="AP Environmental Science">AP Environmental Science</option>
+            <option value="AP World History">AP World History</option>
+            <option value="AP US History">AP US History</option>
+            <option value="AP European History">AP European History</option>
+            <option value="AP Psychology">AP Psychology</option>
+            <option value="AP Human Geography">AP Human Geography</option>
+            <option value="AP Economics (Macro & Micro)">AP Economics (Macro & Micro)</option>
+            <option value="AP Government and Politics">AP Government and Politics</option>
+            <option value="AP English Language and Composition">AP English Language and Composition</option>
+            <option value="AP English Literature and Composition">AP English Literature and Composition</option>
+            <!-- Add more subjects as needed -->
+        </select>
+        <small class="form-text text-muted">Use CTRL or CMD to select multiple subjects.</small>
+    </div> 
 		<div class="form-group">
             <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
         </div>
@@ -66,7 +91,7 @@
 
       <footer class="mastfoot mt-auto">
         <div class="inner">
-          <p>Twutor, created by Timmy Vu, TJHSST '20</p>
+          <p>Twutor, created by Timmy Vu</p>
         </div>
       </footer>
     </div>
@@ -79,6 +104,32 @@
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="../scripts/toggle.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const roleInput = document.getElementById('roleInput');
+    const buttons = document.querySelectorAll('.role-btn');
+
+    // Highlight the button based on the current value
+    buttons.forEach(button => {
+        button.classList.toggle('btn-light', button.dataset.role === roleInput.value);
+        button.classList.toggle('btn-outline-light', button.dataset.role !== roleInput.value);
+    });
+
+    // Set up click event listeners for each button
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            // Update the hidden input's value
+            roleInput.value = this.dataset.role;
+            // Update button styles to reflect the current selection
+            buttons.forEach(btn => {
+                btn.classList.toggle('btn-light', btn === this);
+                btn.classList.toggle('btn-outline-light', btn !== this);
+            });
+        });
+    });
+});
+</script>
   </body>
 </html>
 <style>
@@ -102,7 +153,9 @@ a:hover {
   background-color: #fff;
   border: .05rem solid #fff;
 }
-
+.btn-check {
+  display: none;
+}
 
 /*
  * Base structure

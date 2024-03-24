@@ -1,10 +1,19 @@
 const express = require("express");
-const hbs = require("express-handlebars");
+const { MongoClient } = require("mongodb");
 require('dotenv').config();
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+const hbs = require("express-handlebars").create({
+  helpers: {
+      eq: (v1, v2) => v1 === v2
+  }
+});
+app.engine("hbs", hbs.engine);
+app.set("view engine", "hbs");
+
 const bodyParser = require("body-parser");
-const { MongoClient } = require("mongodb");
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 var userId = null;
@@ -74,7 +83,6 @@ app.use(bodyParser.json());
 // for parsing application/xwww-
 app.use(bodyParser.urlencoded({ extended: true }));
 //form-urlencoded
-app.set("view engine", "hbs");
 app.get("/", (req, res) => {
   res.render("home");
 });
@@ -97,7 +105,7 @@ app.get("/userPortal", (req, res) => {
 });
 app.get("/profile", (req, res) => {
   if (userId) {
-    res.render("profile", { user: userId });
+    res.render("profile", { user: userId});
   } else {
     res.redirect("/login");
   }
@@ -109,18 +117,11 @@ app.get("/connect", async (req, res) => {
 app.get("/about", (req, res) => {
   res.render("about")
 })
-app.engine(
-  "hbs",
-  hbs({
-    defaultLayout: "main",
-    extname: ".hbs",
-  })
-);
 app.post("/create-user", async (req, res) => {
   console.log(req.body);
   var user = {
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
     role: req.body.role,
@@ -150,22 +151,20 @@ app.post("/login-worker", async (req, res) => {
 });
 app.post("/update-user", async (req, res) => {
   console.log(req.body);
-  if(req.body.first_name !=="") {
-    userId.first_name = req.body.first_name
+  if(req.body.firstName) {
+    userId.firstName = req.body.firstName
   }
-  if(req.body.last_name !=="") {
-    userId.last_name = req.body.last_name
+  if(req.body.lastName) {
+    userId.lastName = req.body.lastName
   }
-  if (req.body.phone !== "") {
+  if (req.body.phone) {
     userId.phone = req.body.phone;
   }
-  if (req.body.role !== "") {
+  if (req.body.role) {
     userId.role = req.body.role;
   }
-  if (req.body.subjects !== "") {
-    const subjects = req.body.subjects.split(" ");
-    console.log(subjects);
-    userId.subjects = subjects;
+  if (req.body.subjects) {
+    userId.subjects = req.body.subjects;
   }
   updateUser(client, userId);
   res.redirect("/userPortal");
