@@ -1,244 +1,136 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
-
-    <title>Twutor</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/cover/">
-
-    <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="cover.css" rel="stylesheet">
-  </head>
-
-  <body class="text-center">
-  
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
-        <div class="inner">
-          <h3 class="masthead-brand">Twutor</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link" href="/userPortal">Home</a>
-            <a class="nav-link active" href="/profile">About Me</a>
-            <a class="nav-link" href="/logout">Logout</a>
-          </nav>
+    <title>Twutor Edit Profile</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+      <a class="navbar-brand" href="#">Twutor</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+              <li class="nav-item active">
+                  <a class="nav-link" href="/userPortal">Home</span></a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link active" href="/profile">Edit Profile  <span class="sr-only">(current)</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/logout">Log Out</a>
+              </li>
+          </ul>
+      </div>
+  </nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/update-user" method="POST" class="p-4">
+                        <h2 class="card-title text-center">Edit Profile</h2>
+                        <p class="text-center">Enter or update your information.</p>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control" name="firstName" placeholder="First Name" value="{{user.firstName}}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="text" class="form-control" name="lastName" placeholder="Last Name" value="{{user.lastName}}" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" placeholder="Email" value="{{user.email}}" required>
+                        </div>
+                        {{!-- <div class="form-group">
+                            <input type="phone" class="form-control" name="phone" placeholder="Phone" value="{{user.phone}}" required>
+                        </div> --}}
+                        <div class="form-group">
+                          <select class="form-control" name="role" required>
+                              <option value="">Select Role</option>
+                              <option value="Tutor" {{selectedIfEquals user.role 'Tutor'}}>Tutor</option>
+                              <option value="Student" {{selectedIfEquals user.role 'Student'}}>Student</option>
+                          </select>
+                        </div>
+                        {{!-- <div class="form-group">
+                            <label>Skills:</label>
+                            <div id="skillsContainer" class="d-flex flex-wrap mb-2">
+                              {{#each user.subjects}}
+                                <span class="badge badge-light d-inline-flex align-items-center mr-2 mt-2 custom-badge">{{this}}</span>
+                              {{/each}}
+                            </div>
+                            <input type="text" id="subject" class="form-control" placeholder="Type a skill and press Enter">
+                            <input type="hidden" name="subjects" id="skillsInput" value="{{user.subjects}}">
+                        </div>     --}}
+                          <div class="form-group">
+                          <label>Subjects:</label>
+                          {{#each user.subjects}}
+                            <span class="badge badge-light d-inline-flex align-items-center mr-2 mt-2 custom-badge">{{this}}</span>
+                          {{/each}}
+                          <input type="text" id="skillInput" class="form-control" placeholder="Type a subject and press Enter to add">
+                          <div id="skillsContainer" class="d-flex flex-wrap mt-2"></div>
+                          <input type="hidden" name="subjects" id="skillsInput">
+                        </div>       
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Update Profile</button>
+                        </div>
+                    </form>
+                    <div class="text-center">Need to <a href="/logout" class="text-primary">logout</a>?</div>
+                </div>
+            </div>
         </div>
-      </header>
-
-    <form action="/update-user" method="POST">
-		<h1>Edit Profile</h1>
-    		<p class="hint-text">Enter or update information to help you connect with others!</p>
-
-        <div class="form-group">
-            <input type="text" class="form-control" name="firstName" value="{{user.firstName}}">
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="lastName" value="{{user.lastName}}">
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="email" value="{{user.email}}">
-        </div>
-		    <div class="form-group">
-            <input type="tel" class="form-control" name="phone" value="{{user.phone}}">
-        </div>
-            <!-- Styled Radio Buttons as Toggle Buttons -->
-        <div class="btn-group" role="group" aria-label="Role Selection">
-            <input type="hidden" name="role" id="roleInput" value="{{user.role}}">
-            <button type="button" class="btn btn-outline-light role-btn" data-role="Student">Student</button>
-            <button type="button" class="btn btn-outline-light role-btn" data-role="Tutor">Tutor</button>
-        </div>
-    <div class="form-group">
-        <label for="subjects">Subjects:</label>
-        <select multiple class="form-control" name="subjects[]" id="subjects">
-            <option value="Algebra 1">Algebra 1</option>
-            <option value="Geometry">Geometry</option>
-            <option value="Algebra 2">Algebra 2</option>
-            <option value="Pre-Calculus">Pre-Calculus</option>
-            <option value="AP Calculus AB">AP Calculus AB</option>
-            <option value="AP Calculus BC">AP Calculus BC</option>
-            <option value="AP Biology">AP Biology</option>
-            <option value="AP Chemistry">AP Chemistry</option>
-            <option value="AP Physics 1">AP Physics 1</option>
-            <option value="AP Physics 2">AP Physics 2</option>
-            <option value="AP Physics C">AP Physics C</option>
-            <option value="Chemistry">Calculus</option>
-            <option value="AP Environmental Science">AP Environmental Science</option>
-            <option value="AP World History">AP World History</option>
-            <option value="AP US History">AP US History</option>
-            <option value="AP European History">AP European History</option>
-            <option value="AP Psychology">AP Psychology</option>
-            <option value="AP Human Geography">AP Human Geography</option>
-            <option value="AP Economics (Macro & Micro)">AP Economics (Macro & Micro)</option>
-            <option value="AP Government and Politics">AP Government and Politics</option>
-            <option value="AP English Language and Composition">AP English Language and Composition</option>
-            <option value="AP English Literature and Composition">AP English Literature and Composition</option>
-            <!-- Add more subjects as needed -->
-        </select>
-        <small class="form-text text-muted">Use CTRL or CMD to select multiple subjects.</small>
-    </div> 
-		<div class="form-group">
-            <button type="submit" class="btn btn-success btn-lg btn-block">Submit</button>
-        </div>
-    </form>
-
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <p>Twutor, created by Timmy Vu</p>
-        </div>
-      </footer>
     </div>
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <script src="../scripts/toggle.js"></script>
-  <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const roleInput = document.getElementById('roleInput');
-    const buttons = document.querySelectorAll('.role-btn');
-
-    // Highlight the button based on the current value
-    buttons.forEach(button => {
-        button.classList.toggle('btn-light', button.dataset.role === roleInput.value);
-        button.classList.toggle('btn-outline-light', button.dataset.role !== roleInput.value);
-    });
-
-    // Set up click event listeners for each button
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            // Update the hidden input's value
-            roleInput.value = this.dataset.role;
-            // Update button styles to reflect the current selection
-            buttons.forEach(btn => {
-                btn.classList.toggle('btn-light', btn === this);
-                btn.classList.toggle('btn-outline-light', btn !== this);
-            });
-        });
-    });
-});
-</script>
-  </body>
+</div>
+</body>
 </html>
 <style>
-/*
- * Globals
- */
-
-/* Links */
-a,
-a:focus,
-a:hover {
-  color: #fff;
-}
-
-/* Custom default button */
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  color: #333;
-  text-shadow: none; /* Prevent inheritance from `body` */
-  background-color: #fff;
-  border: .05rem solid #fff;
-}
-.btn-check {
-  display: none;
-}
-
-/*
- * Base structure
- */
-
-html,
-body {
-  height: 100%;
-  background-color: #333;
-}
-
-body {
-  display: -ms-flexbox;
-  display: flex;
-  color: #fff;
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-}
-
-.cover-container {
-  max-width: 42em;
-}
-
-
-/*
- * Header
- */
-.masthead {
-  margin-bottom: 2rem;
-}
-
-.masthead-brand {
-  margin-bottom: 0;
-}
-
-.nav-masthead .nav-link {
-  padding: .25rem 0;
-  font-weight: 700;
-  color: rgba(255, 255, 255, .5);
-  background-color: transparent;
-  border-bottom: .25rem solid transparent;
-}
-
-.nav-masthead .nav-link:hover,
-.nav-masthead .nav-link:focus {
-  border-bottom-color: rgba(255, 255, 255, .25);
-}
-
-.nav-masthead .nav-link + .nav-link {
-  margin-left: 1rem;
-}
-
-.nav-masthead .active {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
-@media (min-width: 48em) {
-  .masthead-brand {
-    float: left;
+  .custom-badge {
+    display: inline-flex !important; /* Ensure it overrides any other display settings */
+    border: 1px solid #6c757d; /* Bootstrap's secondary color border */
+    align-items: center;
+    justify-content: center;
   }
-  .nav-masthead {
-    float: right;
-  }
-}
-
-
-/*
- * Cover
- */
-.cover {
-  padding: 0 1.5rem;
-}
-.cover .btn-lg {
-  padding: .75rem 1.25rem;
-  font-weight: 700;
-}
-
-
-/*
- * Footer
- */
-.mastfoot {
-  color: rgba(255, 255, 255, .5);
-}
 </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const skillInput = document.getElementById('skillInput'); // The input field for entering skills
+        const skillsContainer = document.getElementById('skillsContainer'); // The container where skill badges are displayed
+        const skillsInput = document.getElementById('skillsInput'); // The hidden input that stores the subjects array as a JSON string
+        let skillsArray = JSON.parse(skillsInput.value || '[]'); // Parse the existing skills from the hidden input or default to an empty array
+
+        skillInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // This line prevents the form from being submitted
+
+                const skillValue = skillInput.value.trim();
+                if (skillValue && !skillsArray.includes(skillValue)) { // Check if the skill is non-empty and not already added
+                    skillsArray.push(skillValue); // Add the new skill to the array
+                    addSkillBadge(skillValue); // Create a badge for the new skill
+                    updateSkillsInput(); // Update the hidden input with the current array of skills
+                }
+
+                skillInput.value = ''; // Clear the input field for the next skill
+            }
+        });
+
+        function addSkillBadge(skill) {
+            const badge = document.createElement('span');
+            badge.classList.add('badge','badge-light', 'd-inline-flex', 'align-items-center', 'mr-2', 'mt-2', 'custom-badge');
+            badge.textContent = skill;
+            skillsContainer.appendChild(badge); // Add the badge to the skills container
+        }
+
+        function updateSkillsInput() {
+            skillsInput.value = JSON.stringify(skillsArray); // Update the hidden input with the JSON string of the skills array
+        }
+
+        // Initialize the page with badges for existing skills
+        skillsArray.forEach(skill => addSkillBadge(skill));
+    });
+</script>

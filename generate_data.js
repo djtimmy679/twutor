@@ -40,8 +40,8 @@ async function generateFakeData() {
     const fakeUsers = [];
 
     for (let i = 0; i < numberOfUsers; i++) {
-      const first_name = faker.name.firstName;
-      const last_name = faker.name.lastName;
+      const first_name = faker.name.firstName();
+      const last_name = faker.name.lastName();
       const fakeUser = {
         firstName: first_name,
         lastName: last_name,

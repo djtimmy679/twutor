@@ -7,12 +7,12 @@ const port = process.env.PORT || 3000;
 
 const hbs = require("express-handlebars").create({
   helpers: {
-      eq: (v1, v2) => v1 === v2
+      eq: (v1, v2) => v1 === v2,
+      selectedIfEquals: selectedIfEquals
   }
 });
 app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
-
 const bodyParser = require("body-parser");
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -125,19 +125,21 @@ app.post("/create-user", async (req, res) => {
     email: req.body.email,
     password: req.body.password,
     role: req.body.role,
-    subjects: req.body.subjects
+    // Initialize subjects as an empty array in case parsing fails or it's not provided
+    subjects: JSON.parse(req.body.subjects || '[]')
   };
-  if (req.body.subjects !== "") {
-    const subjects = req.body.subjects.split(" ");
-    console.log(subjects);
-    user.subjects = subjects;
+  try {
+    const userId = await createUser(client, user);
+    console.log(`Created user with ID: ${userId}`);
+    res.redirect("/login");
+  } catch (error) {
+    console.error("Failed to create user:", error);
+    // Handle the error appropriately
+    res.status(500).send("Server error");
   }
-  // doesn't work
-  userId = await createUser(client, user);
-  res.redirect("/login");
 });
+
 app.post("/login-worker", async (req, res) => {
-  console.log(req.body);
   var user = {
     email: req.body.email,
     password: req.body.password,
@@ -149,28 +151,54 @@ app.post("/login-worker", async (req, res) => {
     res.redirect("/login");
   }
 });
+
 app.post("/update-user", async (req, res) => {
-  console.log(req.body);
-  if(req.body.firstName) {
-    userId.firstName = req.body.firstName
+  // Extracting subjects from the request body
+  let subjects = req.body.subjects;
+  // Check if subjects is a string and not empty
+  if (subjects !== ""){
+    newSubjects = JSON.parse(subjects);
   }
-  if(req.body.lastName) {
-    userId.lastName = req.body.lastName
-  }
-  if (req.body.phone) {
-    userId.phone = req.body.phone;
-  }
-  if (req.body.role) {
-    userId.role = req.body.role;
-  }
-  if (req.body.subjects) {
-    userId.subjects = req.body.subjects;
-  }
-  updateUser(client, userId);
+  try {
+    var user = {
+      email: req.body.email,
+    };
+    const userResult = await client.db("UserDB").collection("users").findOne({ email: user.email});
+    console.log('im here');
+    if (!userResult) {
+        // Handle case where user is not found
+        return res.status(404).send("User not found");
+    }
+    console.log('user subjects')
+    console.log(user.subjects)
+    // Combine old and new subjects, removing duplicates
+    const updatedSubjects = Array.from(new Set([...userResult.subjects, ...newSubjects]));
+
+  // Prepare the user object for update, including the converted subjects array
+  const userUpdate = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      role: req.body.role,
+      subjects: updatedSubjects, // Using the array
+  };
+  console.log(userUpdate)
+  await updateUser(client, userUpdate); // Make sure updateUser handles skills correctly
   res.redirect("/userPortal");
+ } catch (error) {
+  console.error("Failed to update user:", error);
+  // Handle the error appropriately
+  res.status(500).send("Server error");
+}
+  // Proceed with your database update logic using the userUpdate object
+  // Make sure to handle errors and send appropriate responses
 });
+
 app.set("view engine", "hbs");
 
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 );
+function selectedIfEquals(value, expectedValue) {
+  return value === expectedValue ? 'selected' : '';
+}
